@@ -1,9 +1,10 @@
 FROM ubuntu:xenial
 
 ENV \
-  BUILD_PACKAGES='sudo make automake libtool pkg-config mongodb-clients' \
+  BUILD_PACKAGES='sudo make automake libtool pkg-config' \
   PERF_PKG='python-pip python-setuptools python-dev' \
-  KEEP_PACKAGES='curl git libaio-dev vim-common libmysqlclient-dev libpq-dev unzip mongodb-clients' \
+  KEEP_PACKAGES='curl git libaio-dev vim-common libmysqlclient-dev libpq-dev unzip' \
+  BASE_PKG='ca-certificates apt-transport-https software-properties-common mongodb-clients' \
   LUA_PKG='libmongoc-dev libbson-dev luarocks' \
   SUDO_FORCE_REMOVE=yes \
   GYMONGO_PYTHON=1 \
@@ -11,10 +12,10 @@ ENV \
 
 RUN DEBIAN_FRONTEND=noninteractive \
   && apt-get -qq update && apt-get -qqy dist-upgrade \
-  && apt-get -qqy --no-install-recommends install ca-certificates apt-transport-https software-properties-common \
   && apt-get -qqy --no-install-recommends install \
      $BUILD_PACKAGES \
      $KEEP_PACKAGES \
+     $BASE_PKG \
      $PERF_PKG \
      $LUA_PKG \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL'>> /etc/sudoers \
