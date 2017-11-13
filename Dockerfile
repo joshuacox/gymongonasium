@@ -1,10 +1,12 @@
 FROM ubuntu:xenial
 
 ENV \
-  BUILD_PACKAGES='sudo make automake libtool pkg-config' \
+  BUILD_PACKAGES='sudo make automake libtool pkg-config mongodb-clients' \
+  PERF_PKG='python-pip python-setuptools python-dev' \
   KEEP_PACKAGES='curl git libaio-dev vim-common libmysqlclient-dev libpq-dev unzip' \
   LUA_PKG='libmongoc-dev libbson-dev luarocks' \
   SUDO_FORCE_REMOVE=yes \
+  GYMONGO_PYTHON=true \
   GYMONGONASIUM_UPDATED=20171112
 
 RUN DEBIAN_FRONTEND=noninteractive \
@@ -13,6 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && apt-get -qqy --no-install-recommends install \
      $BUILD_PACKAGES \
      $KEEP_PACKAGES \
+     $PERF_PKG \
      $LUA_PKG \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL'>> /etc/sudoers \
   && curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash \
@@ -27,14 +30,17 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && LDFLAGS=-L/usr/local/opt/openssl/lib ./configure --with-pgsql \
   && make -j \
   && make install \
-  && cd /usr/local/mongorover
-
-RUN echo 'break' \
   && cd /usr/local/mongorover \
   && luarocks make mongorover*.rockspec \
   && cd /usr/local/sysbench-mongodb-lua \
+  && apt-get -qqy --no-install-recommends install \
+  && cd /usr/local/ \
+  && git clone --depth 1 https://github.com/mongodb/mongo-perf.git \
+  && cd /usr/local/mongo-perf \
+  && pip install -r requirements.txt \
   && apt-get -qqy remove \
      $BUILD_PACKAGES \
+     $PERF_PKG \
   && rm -Rf /usr/local/sysbench \
   && apt-get -y autoremove \
   && apt-get clean \

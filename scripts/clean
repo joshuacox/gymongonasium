@@ -22,7 +22,6 @@ clean() {
   docker rm `cat .gymongonasium.cid`
   echo '..'
   rm -f .gymongonasium.cid
-  ./scripts/rmdirs
   echo  'clean....'
   echo  'Ready to run gymongonasium'
 }

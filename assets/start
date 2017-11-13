@@ -11,7 +11,9 @@ TIME="${TIME:-120}"
 SLEEP="${SLEEP:-5}"
 
 runbench () {
+  echo 'running bench'
   echo prepare
+  cd /usr/local/sysbench-mongodb-lua
 	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT prepare
   echo run
 	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT --time=$TIME run
@@ -20,18 +22,85 @@ runbench () {
 }
 
 echobench () {
+  cd /usr/local/sysbench-mongodb-lua
+  pwd
+  ls
 	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT prepare"
 	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT --time=$TIME run"
 	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT cleanup"
+}
+
+echoperf () {
+  which python
+  cd /usr/local/mongo-perf
+  python -V
+  pwd
+  ls
+  echo \
+  python benchrun.py \
+    -f testcases/* \
+    -t 1 2 4 \
+    --includeFilter insert update \
+    --includeFilter core \
+	  --host $GYMONGODB_HOST \
+    --port $GYMONGODB_PORT \
+    --threads $THREADS \
+    --multidb $TABLES \
+    --trialTime $TIME
+}
+
+runperf () {
+  echo 'running mongo-perf'
+  cd /usr/local/mongo-perf
+  pwd
+  ls
+  python benchrun.py \
+    -f testcases/simple_insert.js \
+	  --host $GYMONGODB_HOST \
+    --port $GYMONGODB_PORT \
+    --threads $THREADS
+}
+
+runperf-simple () {
+  echo 'running mongo-perf'
+  cd /usr/local/mongo-perf
+  pwd
+  ls
+  python benchrun.py \
+    -f testcases/* \
+    -t 1 2 4 \
+    --includeFilter insert update \
+    --includeFilter core \
+	  --host $GYMONGODB_HOST \
+    --port $GYMONGODB_PORT \
+    --threads $THREADS \
+    --multidb $TABLES \
+    --trialTime $TIME
+}
+
+runperf-full () {
+  echo 'running mongo-perf'
+  cd /usr/local/mongo-perf
+  pwd
+  ls
+  python benchrun.py \
+    -f testcases/* \
+    -t 1 2 4 \
+    --includeFilter insert update \
+    --includeFilter core \
+	  --host $GYMONGODB_HOST \
+    --port $GYMONGODB_PORT \
+    --threads $THREADS \
+    --multidb $TABLES \
+    --trialTime $TIME
 }
 
 # Main
 main() {
   if [[ "$VERBOSITY" -gt "0" ]]
   then
-    pwd
-    ls
     echobench
+    echoperf
   fi
 
   if [[ "$SLEEP" -gt "0" ]]
@@ -40,12 +109,21 @@ main() {
     sleep $SLEEP
   fi
 
+  if [[ "$GYMONGO_PYTHON" ]]
+  then
+    runperf
+  fi
+
+  if [[ "$GYMONGO_SYSBENCH" ]]
+  then
+    runbench
+  fi
+
   if [[ "$#" -gt 0 ]]
   then
     exec "$@"
   else
-    echo 'running bench'
-    runbench
+    echo 'Thank for visiting the gymongonasium!'
   fi
 }
 
