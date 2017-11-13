@@ -2,6 +2,14 @@
 
 Container to work out a mongodb instance
 
+### Linked
+
+Test a linked mongodb container and benchmark it:
+
+```
+	docker run -it --link mymongodb:mongodb joshuacox/gymongonasium
+```
+
 ### Makefile
 
 There is a makefile for convenience to test things out.
@@ -29,9 +37,6 @@ As a minimum you will want to specify the mongo host:
 ```
 	docker run \
 		-d \
-		--name gymongonasium \
-		--link mongodb:mongodb \
-		--cidfile .gymongonasium.cid \
 		-e GYMONGODB_DB=${GYMONGODB_DB} \
 		joshuacox/gymongonasium
 ```
@@ -41,9 +46,6 @@ There are a few env vars you can set:
 ```
 	docker run \
 		-d \
-		--name gymongonasium \
-		--link mongodb:mongodb \
-		--cidfile .gymongonasium.cid \
 		-e VERBOSITY=1 \
 		-e TIME=${TIME} \
 		-e SLEEP=${SLEEP} \
