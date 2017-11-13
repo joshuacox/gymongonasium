@@ -65,6 +65,20 @@ bash: clean .mongodb.cid
 		$(TAG) \
 		/bin/bash
 
+sysbench: clean .mongodb.cid sysbenchrun logs
+
+sysbenchrun:
+	$(eval TAG := $(shell cat TAG))
+	docker run \
+		-d \
+		--name gymongonasium \
+		--link mongodb:mongodb \
+		--cidfile .gymongonasium.cid \
+		-e VERBOSITY=1 \
+		-e GYMONGO_SYSBENCH=1 \
+		-e GYMONGO_PYTHON=0 \
+		$(TAG)
+
 pull:
 	$(eval TAG := $(shell cat TAG))
 	docker pull $(TAG)
