@@ -32,6 +32,8 @@ run: clean .mongodb.cid .gymongonasium.cid
 		-e GYMONGODB_DB=${GYMONGODB_DB} \
 		-e GYMONGODB_HOST=${GYMONGODB_HOST} \
 		-e GYMONGODB_PORT=${GYMONGODB_PORT} \
+		-e GYMONGODB_SYSBENCH=1 \
+		-e GYMONGODB_PYTHON=0 \
 		$(TAG)
 
 pull:

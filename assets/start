@@ -61,23 +61,6 @@ runperf () {
     --threads $THREADS
 }
 
-runperf-simple () {
-  echo 'running mongo-perf'
-  cd /usr/local/mongo-perf
-  pwd
-  ls
-  python benchrun.py \
-    -f testcases/* \
-    -t 1 2 4 \
-    --includeFilter insert update \
-    --includeFilter core \
-	  --host $GYMONGODB_HOST \
-    --port $GYMONGODB_PORT \
-    --threads $THREADS \
-    --multidb $TABLES \
-    --trialTime $TIME
-}
-
 runperf-full () {
   echo 'running mongo-perf'
   cd /usr/local/mongo-perf
@@ -109,12 +92,17 @@ main() {
     sleep $SLEEP
   fi
 
-  if [[ "$GYMONGO_PYTHON" ]]
+  if [[ "$GYMONGO_PYTHON" -gt "0" ]]
   then
     runperf
   fi
 
-  if [[ "$GYMONGO_SYSBENCH" ]]
+  if [[ "$GYMONGO_PYTHON" -gt "10" ]]
+  then
+    runperf-full
+  fi
+
+  if [[ "$GYMONGO_SYSBENCH" -gt "0" ]]
   then
     runbench
   fi
