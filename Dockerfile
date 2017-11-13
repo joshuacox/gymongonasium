@@ -3,10 +3,10 @@ FROM ubuntu:xenial
 ENV \
   BUILD_PACKAGES='sudo make automake libtool pkg-config mongodb-clients' \
   PERF_PKG='python-pip python-setuptools python-dev' \
-  KEEP_PACKAGES='curl git libaio-dev vim-common libmysqlclient-dev libpq-dev unzip' \
+  KEEP_PACKAGES='curl git libaio-dev vim-common libmysqlclient-dev libpq-dev unzip mongodb-clients' \
   LUA_PKG='libmongoc-dev libbson-dev luarocks' \
   SUDO_FORCE_REMOVE=yes \
-  GYMONGO_PYTHON=true \
+  GYMONGO_PYTHON=1 \
   GYMONGONASIUM_UPDATED=20171112
 
 RUN DEBIAN_FRONTEND=noninteractive \

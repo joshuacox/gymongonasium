@@ -36,7 +36,7 @@ echoperf () {
   python -V
   pwd
   ls
-  echo \
+  echo "\
   python benchrun.py \
     -f testcases/* \
     -t 1 2 4 \
@@ -46,7 +46,7 @@ echoperf () {
     --port $GYMONGODB_PORT \
     --threads $THREADS \
     --multidb $TABLES \
-    --trialTime $TIME
+    --trialTime $TIME"
 }
 
 runperf () {
@@ -54,7 +54,8 @@ runperf () {
   cd /usr/local/mongo-perf
   pwd
   ls
-  python benchrun.py \
+  ls -lh testcases/simple_insert.js
+  /usr/bin/python benchrun.py \
     -f testcases/simple_insert.js \
 	  --host $GYMONGODB_HOST \
     --port $GYMONGODB_PORT \
@@ -62,7 +63,7 @@ runperf () {
 }
 
 runperf-full () {
-  echo 'running mongo-perf'
+  echo 'running full mongo-perf'
   cd /usr/local/mongo-perf
   pwd
   ls
@@ -111,7 +112,7 @@ main() {
   then
     exec "$@"
   else
-    echo 'Thank for visiting the gymongonasium!'
+    echo 'Thank you for visiting the gymongonasium!'
   fi
 }
 

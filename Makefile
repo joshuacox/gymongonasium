@@ -32,9 +32,38 @@ run: clean .mongodb.cid .gymongonasium.cid
 		-e GYMONGODB_DB=${GYMONGODB_DB} \
 		-e GYMONGODB_HOST=${GYMONGODB_HOST} \
 		-e GYMONGODB_PORT=${GYMONGODB_PORT} \
-		-e GYMONGODB_SYSBENCH=0 \
-		-e GYMONGODB_PYTHON=1 \
+		-e GYMONGO_SYSBENCH=0 \
+		-e GYMONGO_PYTHON=1 \
 		$(TAG)
+
+bash: clean .mongodb.cid
+	$(eval TAG := $(shell cat TAG))
+	$(eval TIME := $(shell cat TIME))
+	$(eval SLEEP := $(shell cat SLEEP))
+	$(eval TABLES := $(shell cat TABLES))
+	$(eval THREADS := $(shell cat THREADS))
+	$(eval TABLE_SIZE := $(shell cat TABLE_SIZE))
+	$(eval GYMONGODB_DB := $(shell cat GYMONGODB_DB))
+	$(eval GYMONGODB_HOST := $(shell cat GYMONGODB_HOST))
+	$(eval GYMONGODB_PORT := $(shell cat GYMONGODB_PORT))
+	docker run \
+		-d \
+		--name gymongonasium \
+		--link mongodb:mongodb \
+		--cidfile .gymongonasium.cid \
+		-e VERBOSITY=1 \
+		-e TIME=${TIME} \
+		-e SLEEP=${SLEEP} \
+		-e TABLES=${TABLES} \
+		-e THREADS=${THREADS} \
+		-e TABLE_SIZE=${TABLE_SIZE} \
+		-e GYMONGODB_DB=${GYMONGODB_DB} \
+		-e GYMONGODB_HOST=${GYMONGODB_HOST} \
+		-e GYMONGODB_PORT=${GYMONGODB_PORT} \
+		-e GYMONGO_SYSBENCH=0 \
+		-e GYMONGO_PYTHON=1 \
+		$(TAG) \
+		/bin/bash
 
 pull:
 	$(eval TAG := $(shell cat TAG))
