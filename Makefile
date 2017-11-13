@@ -34,8 +34,11 @@ run: clean .mongodb.cid .gymongonasium.cid
 		-e GYMONGODB_PORT=${GYMONGODB_PORT} \
 		$(TAG)
 
+pull:
+	$(eval TAG := $(shell cat TAG))
+	docker pull $(TAG)
+
 .mongodb.cid:
-	$(eval TRY := $(shell cat TRY))
 	docker run --name mongodb \
 		-d \
 		--cidfile=.mongodb.cid \

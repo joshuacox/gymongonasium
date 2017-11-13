@@ -2,6 +2,28 @@
 
 Container to work out a mongodb instance
 
+### Makefile
+
+There is a makefile for convenience to test things out.
+
+`make build` will build sysbench and mongorover image from source
+
+`make pull` or you can pull it from dockerhub
+
+`make run` will run a mongodb instance and the above built container
+will test it
+
+`make logs` to watch the log output
+
+`make enter` to enter the running sysbench container
+
+`make clean` will destroy the running containers and cleanup
+
+`make binbuild` will test out the packages binaries (*broken for now as
+mongorover is out of date)
+
+### env vars
+
 As a minimum you will want to specify the mongo host:
 
 ```
@@ -34,20 +56,10 @@ There are a few env vars you can set:
 		joshuacox/gymongonasium
 ```
 
-### Makefile
+you can also echo values out into this directory and they will be
+gitignored, but also read in upon starting the make recipes.  e.g.
 
-There is a makefile for convenience to test things out.
-
-`make build` will build everything sysbench and mongorover from source
-
-`make run` will run a mongodb instance and the above built container
-will test it
-
-`make logs` to watch the log output
-
-`make enter` to enter the running sysbench container
-
-`make clean` will destroy the running containers and cleanup
-
-`make binbuild` will test out the packages binaries (*broken for now as
-mongorover is out of date)
+```
+echo 240>TIME
+echo 55>THREADS
+```
