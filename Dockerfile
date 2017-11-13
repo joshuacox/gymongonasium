@@ -22,9 +22,10 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && sudo apt -y install sysbench \
   && sudo apt -y remove sysbench \
   && cd /usr/local \
-  && git clone --depth 1 https://github.com/akopytov/sysbench.git \
   && git clone --depth 1 https://github.com/Percona-Lab/sysbench-mongodb-lua.git \
   && git clone --depth 1 https://github.com/mongodb-labs/mongorover.git \
+  && git clone --depth 1 https://github.com/mongodb/mongo-perf.git \
+  && git clone --depth 1 https://github.com/akopytov/sysbench.git \
   && cd sysbench \
   && ./autogen.sh \
   && LDFLAGS=-L/usr/local/opt/openssl/lib ./configure --with-pgsql \
@@ -32,10 +33,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && make install \
   && cd /usr/local/mongorover \
   && luarocks make mongorover*.rockspec \
-  && cd /usr/local/sysbench-mongodb-lua \
-  && apt-get -qqy --no-install-recommends install \
-  && cd /usr/local/ \
-  && git clone --depth 1 https://github.com/mongodb/mongo-perf.git \
   && cd /usr/local/mongo-perf \
   && pip install -r requirements.txt \
   && apt-get -qqy remove \
