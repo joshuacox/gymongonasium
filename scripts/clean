@@ -1,0 +1,37 @@
+#!/bin/bash
+# Stops and removes previously running gymongonasium containers
+
+# Main
+main() {
+	if [  -f ".gymongonasium.cid" ]; then
+    clean
+  else
+    echo "No previous gymongonasium container to clean"
+	fi
+	if [  -f ".mongodb.cid" ]; then
+    mongoclean
+	fi
+}
+
+clean() {
+  echo -n 'Stopping and Removing any running gymongonasium containers..'
+  touch .gymongonasium.cid
+  docker stop `cat .gymongonasium.cid`
+  #docker kill `cat .gymongonasium.cid`
+  echo -n '..'
+  docker rm `cat .gymongonasium.cid`
+  echo '..'
+  rm -f .gymongonasium.cid
+  ./scripts/rmdirs
+  echo  'clean....'
+  echo  'Ready to run gymongonasium'
+}
+mongoclean() {
+  echo  'cleaning mongo....'
+  docker stop `cat .mongodb.cid`
+  docker rm `cat .mongodb.cid`
+  rm -f .mongodb.cid
+  echo  'mongo clean....'
+}
+
+main "$@"

@@ -1,0 +1,32 @@
+FROM ubuntu:xenial
+
+ENV \
+  BUILD_PACKAGES='sudo make automake libtool pkg-config' \
+  KEEP_PACKAGES='curl git libaio-dev vim-common libmysqlclient-dev libpq-dev unzip' \
+  LUA_PKG='libmongoc-dev libbson-dev luarocks' \
+  SUDO_FORCE_REMOVE=yes \
+  GYMONGONASIUM_UPDATED=20171112
+
+RUN DEBIAN_FRONTEND=noninteractive \
+  && apt-get -qq update && apt-get -qqy dist-upgrade \
+  && apt-get -qqy --no-install-recommends install ca-certificates apt-transport-https software-properties-common \
+  && apt-get -qqy --no-install-recommends install \
+     $BUILD_PACKAGES \
+     $KEEP_PACKAGES \
+     $LUA_PKG \
+  && echo '%sudo ALL=(ALL) NOPASSWD:ALL'>> /etc/sudoers \
+  && curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash \
+  && apt-get -qq update \
+  && sudo apt -y install sysbench \
+  && cd /usr/local \
+  && git clone --depth 1 https://github.com/Percona-Lab/sysbench-mongodb-lua.git \
+  && cd /usr/local/sysbench-mongodb-lua \
+  && luarocks install mongorover --local \
+  && apt-get -y autoremove \
+  && apt-get clean \
+  && rm -Rf /var/lib/apt/lists/*
+
+WORKDIR /usr/local/sysbench-mongodb-lua
+
+COPY assets /assets
+ENTRYPOINT [ "/assets/start" ]

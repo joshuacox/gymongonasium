@@ -1,0 +1,52 @@
+#!/bin/bash
+set -e
+
+TABLES="${TABLES:-10}"
+THREADS="${THREADS:-10}"
+TABLE_SIZE="${TABLE_SIZE:-100}"
+GYMONGODB_DB="${GYMONGODB_DB:-gymongonasium}"
+GYMONGODB_HOST="${GYMONGODB_HOST:-mongodb}"
+GYMONGODB_PORT="${GYMONGODB_PORT:-27017}"
+TIME="${TIME:-120}"
+SLEEP="${SLEEP:-5}"
+
+runbench () {
+  echo prepare
+	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT prepare
+  echo run
+	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT --time=$TIME run
+  echo cleanup
+	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT cleanup
+}
+
+echobench () {
+	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT prepare"
+	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT --time=$TIME run"
+	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT cleanup"
+}
+
+# Main
+main() {
+  if [[ "$VERBOSITY" -gt "0" ]]
+  then
+    pwd
+    ls
+    echobench
+  fi
+
+  if [[ "$SLEEP" -gt "0" ]]
+  then
+    echo sleeping $SLEEP....
+    sleep $SLEEP
+  fi
+
+  if [[ "$#" -gt 0 ]]
+  then
+    exec "$@"
+  else
+    echo 'running bench'
+    runbench
+  fi
+}
+
+main "$@"
