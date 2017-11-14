@@ -14,20 +14,20 @@ runbench () {
   echo 'running bench'
   echo prepare
   cd /usr/local/sysbench-mongodb-lua
-	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT prepare
+	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table_size=$TABLE_SIZE --mongodb_db=$GYMONGODB_DB --mongodb_host=$GYMONGODB_HOST --mongodb_port=$GYMONGODB_PORT prepare
   echo run
-	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT --time=$TIME run
+	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table_size=$TABLE_SIZE --mongodb_db=$GYMONGODB_DB --mongodb_host=$GYMONGODB_HOST --mongodb_port=$GYMONGODB_PORT --time=$TIME run
   echo cleanup
-	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT cleanup
+	sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table_size=$TABLE_SIZE --mongodb_db=$GYMONGODB_DB --mongodb_host=$GYMONGODB_HOST --mongodb_port=$GYMONGODB_PORT cleanup
 }
 
 echobench () {
   cd /usr/local/sysbench-mongodb-lua
   pwd
   ls
-	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT prepare"
-	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT --time=$TIME run"
-	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table-size=$TABLE_SIZE --mongodb-db=$GYMONGODB_DB --mongodb-host=$GYMONGODB_HOST --mongodb-port=$GYMONGODB_PORT cleanup"
+	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table_size=$TABLE_SIZE --mongodb_db=$GYMONGODB_DB --mongodb_host=$GYMONGODB_HOST --mongodb_port=$GYMONGODB_PORT prepare"
+	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table_size=$TABLE_SIZE --mongodb_db=$GYMONGODB_DB --mongodb_host=$GYMONGODB_HOST --mongodb_port=$GYMONGODB_PORT --time=$TIME run"
+	echo "sysbench oltp-mongo.lua --tables=$TABLES --threads=$THREADS --table_size=$TABLE_SIZE --mongodb_db=$GYMONGODB_DB --mongodb_host=$GYMONGODB_HOST --mongodb_port=$GYMONGODB_PORT cleanup"
 }
 
 echoperf () {
