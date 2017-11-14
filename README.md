@@ -52,6 +52,8 @@ There are a few env vars you can set:
 		-e TABLES=${TABLES} \
 		-e THREADS=${THREADS} \
 		-e TABLE_SIZE=${TABLE_SIZE} \
+		-e RANGE_SIZE=${RANGE_SIZE} \
+		-e SUM_RANGES=${SUM_RANGES} \
 		-e GYMONGODB_DB=${GYMONGODB_DB} \
 		-e GYMONGODB_HOST=${GYMONGODB_HOST} \
 		-e GYMONGODB_PORT=${GYMONGODB_PORT} \

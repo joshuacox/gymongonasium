@@ -15,6 +15,8 @@ run: clean .mongodb.cid .gymongonasium.cid
 	$(eval TABLES := $(shell cat TABLES))
 	$(eval THREADS := $(shell cat THREADS))
 	$(eval TABLE_SIZE := $(shell cat TABLE_SIZE))
+	$(eval RANGE_SIZE := $(shell cat RANGE_SIZE))
+	$(eval SUM_RANGES := $(shell cat SUM_RANGES))
 	$(eval GYMONGODB_DB := $(shell cat GYMONGODB_DB))
 	$(eval GYMONGODB_HOST := $(shell cat GYMONGODB_HOST))
 	$(eval GYMONGODB_PORT := $(shell cat GYMONGODB_PORT))
@@ -29,6 +31,8 @@ run: clean .mongodb.cid .gymongonasium.cid
 		-e TABLES=${TABLES} \
 		-e THREADS=${THREADS} \
 		-e TABLE_SIZE=${TABLE_SIZE} \
+		-e RANGE_SIZE=${RANGE_SIZE} \
+		-e SUM_RANGES=${SUM_RANGES} \
 		-e GYMONGODB_DB=${GYMONGODB_DB} \
 		-e GYMONGODB_HOST=${GYMONGODB_HOST} \
 		-e GYMONGODB_PORT=${GYMONGODB_PORT} \
@@ -69,6 +73,7 @@ sysbench: clean .mongodb.cid sysbenchrun logs
 
 sysbenchrun:
 	$(eval TAG := $(shell cat TAG))
+	$(eval THREADS := $(shell cat THREADS))
 	docker run \
 		-d \
 		--name gymongonasium \
@@ -76,6 +81,7 @@ sysbenchrun:
 		--cidfile .gymongonasium.cid \
 		-e VERBOSITY=1 \
 		-e GYMONGO_SYSBENCH=1 \
+		-e THREADS=${THREADS} \
 		-e GYMONGO_PYTHON=0 \
 		$(TAG)
 
